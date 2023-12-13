@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.buying.purchase.Pmapper">
+    <insert id="Buyins" useGeneratedKeys="true" keyProperty="productPk">
+        INSERT INTO t_purchase_product
+        SET user_pk = #{userPk}, category_pk = #{category}, product_nm = #{name}, memo = #{memo}
+    </insert>
+    <select id="BuySel">
+        SELECT A.product_pk AS productPk, B.category_nm AS categoryNm,
+        A.product_nm AS productNm, A.memo, A.buying_check AS buyingCheck,
+        A.buying_date AS buyingDate, A.create_at AS createdAt
+        FROM t_purchase_product A
+        JOIN t_category B ON A.category_pk = B.category_pk
+        WHERE A.user_pk = #{userPk}
+    </select>
+    <update id="BuyEdit">
+        UPDATE t_purchase_product
+        SET category_pk = #{categoryPk}, product_nm = #{productNm}, memo= #{memo}
+        WHERE product_pk = #{productPk}
+    </update>
+    <delete id="BuyDel">
+        DELETE FROM t_purchase_product
+        WHERE product_pk = #{productPk}
+    </delete>
+    <update id="BuyCheck">
+        UPDATE t_purchase_product
+        SET buying_check = 1, buying_date = NOW()
+        WHERE product_pk = #{productPk}
+    </update>
+</mapper>
